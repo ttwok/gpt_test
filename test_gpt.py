@@ -8,6 +8,16 @@ openai.api_key = 'sk-proj-W8QTVZpNJVLvWcTNeFpqT3BlbkFJ5OCQwqKFLrMce3RMGOmt'
 # 데이터 로드
 gpt_df = pd.read_excel('data/profit_month/profit_month.xlsx')
 
+
+# Streamlit 앱
+st.title('월별 운영실적 분석')
+if st.button('GPT 분석 실행'):
+    result = gpt(gpt_df)
+    st.session_state['gpt_result'] = result
+    st.write(st.session_state['gpt_result'])
+
+
+
 def gpt(gpt_df):
     gpt_df['날짜'] = pd.to_datetime(gpt_df['날짜'])
     gpt_df['년도'] = gpt_df['날짜'].dt.year
@@ -31,9 +41,3 @@ def ask_gpt(prompt):
     )
     return response.choices[0].message['content']
 
-# Streamlit 앱
-st.title('월별 운영실적 분석')
-if st.button('GPT 분석 실행'):
-    result = gpt(gpt_df)
-    st.session_state['gpt_result'] = result
-    st.write(st.session_state['gpt_result'])
